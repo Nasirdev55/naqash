@@ -118,10 +118,18 @@
                         @endforeach
                     </div>
                     <div class="col-lg-6 pt-5 pt-lg-0">
+                        <form class="create-form" enctype="multipart/form-data" method="post">
+
+                            @csrf
                         <div class="single-product-content">
+                                <input type="hidden" name="product_id" value="{{$product_id->id}}">
+                                <input type="hidden" name="category_id" value="{{$product_id->category_id}}">
+                                <input type="hidden" name="brand_id" value="{{$product_id->brand_id}}">
+                                <input type="hidden" name="product_id" value="{{$product_id->id}}">
                             <h2 class="title">{{$product_id->name}}</h2>
                             <div class="price-box">
                                 <span class="new-price">{{$product_id->price}}</span>
+                                <input type="hidden" name="price" value="{{$product_id->price}}">
                             </div>
                             <div class="rating-box-wrap">
                                 <div class="rating-box">
@@ -139,20 +147,28 @@
                             </div>
                             <div class="selector-wrap color-option">
                                 <span class="selector-title border-bottom-0">Color</span>
-                                <select class="nice-select wide border-bottom-0 rounded-0" style="display: none;">
-                                    <option value="default">Black &amp; White</option>
-                                    <option value="blue">Blue</option>
-                                    <option value="green">Green</option>
-                                    <option value="red">Red</option>
-                                </select><div class="nice-select wide border-bottom-0 rounded-0" tabindex="0"><span class="current">Black &amp; White</span><ul class="list"><li data-value="default" class="option selected">Black &amp; White</li><li data-value="blue" class="option">Blue</li><li data-value="green" class="option">Green</li><li data-value="red" class="option">Red</li></ul></div>
+                                @foreach($products as $pro)
+                                    @foreach($pro->colors as $color)
+                                <select class="nice-select wide border-bottom-0 rounded-0" name="color">
+
+                                    <option value="{{$color->id}}">{{$color->color_name}}</option>
+
+                                </select>
+                                    @endforeach
+                                @endforeach
+
                             </div>
                             <div class="selector-wrap size-option">
                                 <span class="selector-title">Size</span>
-                                <select class="nice-select wide rounded-0" style="display: none;">
-                                    <option value="medium">Medium Size &amp; Poot</option>
-                                    <option value="large">Large Size With Poot</option>
-                                    <option value="small">Small Size With Poot</option>
-                                </select><div class="nice-select wide rounded-0" tabindex="0"><span class="current">Medium Size &amp; Poot</span><ul class="list"><li data-value="medium" class="option selected">Medium Size &amp; Poot</li><li data-value="large" class="option">Large Size With Poot</li><li data-value="small" class="option">Small Size With Poot</li></ul></div>
+                                @foreach($products as $pro)
+                                    @foreach($pro->sizes as $size)
+                                        <select  class="nice-select wide border-bottom-0 rounded-0" name="size">
+
+                                            <option value="{{$size->id}}">{{$size->size_name}}</option>
+
+                                        </select>
+                                    @endforeach
+                                @endforeach
                             </div>
                             <p class="short-desc">Lorem ipsum dolor sit amet, consectetur adipisic elit, sed do eiusmod
                                 tempo incid ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostru
@@ -161,12 +177,13 @@
                             <ul class="quantity-with-btn">
                                 <li class="quantity">
                                     <div class="cart-plus-minus">
-                                        <input class="cart-plus-minus-box" value="1" type="text">
+                                        <input class="cart-plus-minus-box" value="1" type="text" name="quantity">
                                         <div class="dec qtybutton"><i class="fa fa-minus"></i></div><div class="inc qtybutton"><i class="fa fa-plus"></i></div></div>
                                 </li>
                                 <li class="add-to-cart">
-                                    <a class="btn btn-custom-size lg-size btn-pronia-primary" href="cart.html">Add to
-                                        cart</a>
+                                    <button type="submit" class="btn btn-custom-size lg-size btn-pronia-primary">Add to cart</button>
+                                    {{--<input class="btn btn-custom-size lg-size btn-pronia-primary" type="submit">Add to--}}
+                                        {{--cart</input>--}}
                                 </li>
                                 <li class="wishlist-btn-wrap">
                                     <a class="custom-circle-btn" href="wishlist.html">
@@ -258,6 +275,7 @@
                                 </ul>
                             </div>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -418,3 +436,54 @@
 
     </main>
     @endsection
+@section('script')
+<script>
+        $('.create-form').on('submit',function (e){
+            e.preventDefault();
+            var data = $('.create-form');
+            data = new FormData(data[0]);
+
+//             console.log(data);
+//             return;
+            // let data = $(this);
+            // data = new FormData(data[0]);
+            // var data = $(this).serialize();
+            // let formData = new FormData(this);
+            blockUi();
+            $.ajax({
+                type:'POST',
+                dataType:'json',
+                url:'{{route('product.cart',['product'=> $product_id])}}',
+                data:data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data) {
+                    $.unblockUI();
+                    if(data.status == 1){
+
+                        swal("Successfully", "Added to Your Cart", "success", {
+                            button: "OK",
+                        });
+//                        successMsg(data.message);
+//                        window.location.href = data.url;
+                         window.location.reload();
+                    }
+                    if(data.status == 0){
+                        swal("Already", "Product is in Your Cart", "error", {
+                            button: "OK",
+                        });
+//                        errorMsg(data.message);
+                    }
+                },
+                error:function(data) {
+                    console.log('error');
+                    $.unblockUI();
+
+                }
+
+            });
+
+        });
+</script>
+@endsection

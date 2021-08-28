@@ -1,3 +1,4 @@
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="{{asset('assets/js/forslider.js')}}"></script>
 <script src="{{asset('assets/js/forslider2.js')}}"></script>
 <script src="{{asset('assets/js/vendor/bootstrap.bundle.min.js')}}"></script>

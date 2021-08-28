@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\SubCategory;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,6 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         SubCategory::factory(10)->create();
+         UserSeeder::factory(10)->create();
     }
 }

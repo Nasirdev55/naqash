@@ -104,6 +104,6 @@ class AuthenticationController extends Controller
     }
     protected function loggedOut(Request $request)
     {
-        //
+        $request->session()->forget('session_id');
     }
 }

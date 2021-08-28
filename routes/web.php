@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
+use TCG\Voyager\Facades\Voyager;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,24 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Products Routes in User side
+Route::prefix('product')->as('product.')->group(function (){
 
+//    Route::get('/',[\App\Http\Controllers\ProductController::class,'index'])->name('list');
+//    Route::get('/{product}/details',[\App\Http\Controllers\ProductController::class,'show'])->name('details');
+    Route::post('{product}/cart',[\App\Http\Controllers\CartController::class,'cart'])->name('cart');
+    Route::get('/carts',[\App\Http\Controllers\CartController::class,'showCarts'])->name('show-carts');
+    Route::post('/cart-update',[\App\Http\Controllers\CartController::class,'cartUpdate'])->name('cart-update');
+    Route::post('/cart-delete',[\App\Http\Controllers\CartController::class,'cartDelete'])->name('cart-delete');
+//    Route::post('/coupon',[\App\Http\Controllers\CartController::class,'coupon'])->name('coupon-check');
+    //Route for checkouts
+
+    Route::get('/{user}/checkouts',[\App\Http\Controllers\CheckoutController::class,'index'])->name('checkouts');
+    Route::post('/order',[\App\Http\Controllers\CheckoutController::class,'order'])->name('order');
+//    Route::post('/{user}/checkouts-submit',[\App\Http\Controllers\CheckoutsController::class,'store'])->name('checkouts-submit');
+//    Route::post('/{user}/order-submit',[\App\Http\Controllers\OrderController::class,'store'])->name('order-submit');
+
+});
 
 Route::prefix('site')->group(function(){
 
@@ -54,3 +72,8 @@ Route::prefix('site')->group(function(){
 //Route::middleware('user')->group(function(){
 //
 //}
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});

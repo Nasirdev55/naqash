@@ -16,11 +16,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('products')->insert([
-            'category_id' => '3',
-            'brand_id' => '1',
-            'name' => Str::random(10),
-            'price' =>  '2500',
+        DB::table('colors')->insert([
+//            'category_id' => '3',
+            'color_name' => 'yellow',
+//            'name' => Str::random(10),
+//            'price' =>  '2500',
             'description' => Str::random(6),
         ]);
     }

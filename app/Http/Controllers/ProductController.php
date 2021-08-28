@@ -9,7 +9,8 @@ class ProductController extends Controller
 {
     public function detailsProduct(Product $product_id)
     {
-        $products = Product::get();
+        $products = Product::with('sizes','colors')->get();
+//        dd($products);
         return view('site.product.productDetails',compact('product_id','products'));
 
     }

@@ -1,0 +1,34 @@
+{
+    "name": "create_orders_table",
+    "description": "This is my first hook.",
+    "require": {
+        "larapack/hooks": "^1.0.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "CreateOrdersTable\\": "src/"
+        }
+    },
+    "extra": {
+        "hook": {
+            "providers": [
+                "CreateOrdersTable\\CreateOrdersTableServiceProvider"
+            ],
+            "aliases": {
+                "CreateOrdersTable": "CreateOrdersTable\\CreateOrdersTableFacade"
+            },
+            "migrations": [
+                "resources/database/migrations"
+            ],
+            "seeders": [
+                "resources/database/seeders"
+            ],
+            "unseeders": [
+                "resources/database/unseeders"
+            ],
+            "assets": {
+                "resources/assets": "public/vendor/create_orders_table"
+            }
+        }
+    }
+}
